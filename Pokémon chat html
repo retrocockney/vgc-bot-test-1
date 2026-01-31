@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokémon TCG & VGC Chat Bot</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f8ff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        height: 100vh;
+    }
+    h1 {
+        margin-top: 10px;
+        color: #0077cc;
+    }
+    #chat {
+        width: 90%;
+        max-width: 600px;
+        height: 75%;
+        border: 2px solid #0077cc;
+        border-radius: 10px;
+        padding: 10px;
+        overflow-y: scroll;
+        background: #ffffff;
+        margin-top: 20px;
+    }
+    .message {
+        margin: 5px 0;
+    }
+    .user { color: #0077cc; font-weight: bold; }
+    .bot { color: #cc0000; font-weight: bold; }
+    #inputArea {
+        width: 90%;
+        max-width: 600px;
+        display: flex;
+        margin-top: 10px;
+    }
+    #userInput {
+        flex: 1;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #0077cc;
+        font-size: 16px;
+    }
+    #sendBtn {
+        padding: 10px 20px;
+        margin-left: 5px;
+        background: #0077cc;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+<h1>Pokémon TCG & VGC Chat Bot</h1>
+
+<div id="chat"></div>
+
+<div id="inputArea">
+    <input type="text" id="userInput" placeholder="Ask a Pokémon question..." />
+    <button id="sendBtn">Send</button>
+</div>
+
+<script>
+// Preloaded Pokémon TCG & VGC info
+const pokemonData = [
+    {question: "pikachu weakness", answer: "In VGC, Pikachu is weak to Ground-type moves."},
+    {question: "starter tgc", answer: "In TCG, strong starter cards include Charizard, Blastoise, and Venusaur depending on format."},
+    {question: "vmax rules", answer: "VMAX Pokémon have higher HP and powerful attacks but give 2 prize cards when knocked out."},
+    {question: "vgc team size", answer: "VGC teams have 6 Pokémon, with 4 used per match."},
+    {question: "tcg turn limit", answer: "There is no official turn limit; the game ends when a player takes all prize cards or cannot draw."},
+    {question: "promo cards", answer: "Promo cards are special limited edition TCG cards often given at events."},
+    {question: "energy rules", answer: "In TCG, one basic energy can be attached per turn unless an effect allows more."},
+    {question: "evolution rule", answer: "Pokémon must evolve from the previous stage, not on the first turn unless a rule allows it."},
+    {question: "vgc dynamax", answer: "Dynamax is not used in standard VGC; only Gigantamax forms appear in special rules."},
+    {question: "tcg prize cards", answer: "Each player starts with 6 prize cards; take one when you knock out a Pokémon."},
+    {question: "vgc battle format", answer: "VGC battles are double battles: 2 Pokémon on each side."},
+    {question: "tcg discard pile", answer: "Discarded Pokémon, energies, and trainer cards go here; some effects can recover them."},
+    {question: "vgc speed tie", answer: "In VGC, if two Pokémon have the same Speed, the controller of the Pokémon moves first is determined randomly."},
+    {question: "tcg trainer cards", answer: "Trainer cards have effects like drawing cards, healing, or searching your deck."},
+    {question: "vgc legendary", answer: "Most formats allow only one of each legendary per team, unless rules say otherwise."},
+    {question: "tcg deck size", answer: "A standard TCG deck must have exactly 60 cards."},
+    {question: "vgc item rules", answer: "Each Pokémon can hold one item per battle."},
+    {question: "tcg stadium rules", answer: "Stadium cards affect both players and stay in play until replaced or removed."},
+    {question: "vgc abilities", answer: "Abilities trigger automatically when conditions are met and are separate from moves."},
+    {question: "tcg bench limit", answer: "You can have up to 5 Pokémon on your bench."}
+];
+
+// Function to get bot reply
+function getReply(input) {
+    input = input.toLowerCase();
+    for (let data of pokemonData) {
+        if (input.includes(data.question)) {
+            return data.answer;
+        }
+    }
+    return "Sorry, I only know Pokémon TCG & VGC info.";
+}
+
+// Function to add message to chat
+function addMessage(sender, text) {
+    const chat = document.getElementById("chat");
+    const msg = document.createElement("div");
+    msg.classList.add("message", sender);
+    msg.textContent = sender === "user" ? "You: " + text : "Bot: " + text;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+// Handle sending
+document.getElementById("sendBtn").addEventListener("click", () => {
+    const input = document.getElementById("userInput").value.trim();
+    if (input === "") return;
+    addMessage("user", input);
+    const reply = getReply(input);
+    addMessage("bot", reply);
+    document.getElementById("userInput").value = "";
+});
+
+document.getElementById("userInput").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") document.getElementById("sendBtn").click();
+});
+</script>
+</body>
+</html>
